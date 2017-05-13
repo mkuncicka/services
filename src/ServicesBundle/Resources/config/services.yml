@@ -1,0 +1,7 @@
+services:
+#    services.example:
+#        class: ServicesBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]
+    services.test_manager:
+        class: ServicesBundle\Manager\TestManager
+        arguments: ["knp_snappy.pdf", "doctrine.entity_manager", "@templating"]
