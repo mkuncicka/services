@@ -1,44 +1,31 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Tests list</h1>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Questions</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <h1>Lista testów</h1>
         {% for test in tests %}
-            <tr>
-                <td><a href="{{ path('test_show', { 'id': test.id }) }}">{{ test.id }}</a></td>
-                <td>{{ test.title }}</td>
+            <h2><a href="{{ path('test_show', { 'id': test.id }) }}">{{ test.title }}</a></h2>
                 {% for question in test.questions %}
-                <td>{{ questions.text }}</td>
+                    <h3>{{ question.text }}</h3>
+                    {% for answer in question.answers %}
+                        <p>{{ answer.text }}</p>
+                    {% endfor %}
                 {% endfor %}
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('test_show', { 'id': test.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('test_edit', { 'id': test.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
+            <ul>
+                <li>
+                    <a href="{{ path('test_show', { 'id': test.id }) }}">show</a>
+                </li>
+                <li>
+                    <a href="{{ path('test_edit', { 'id': test.id }) }}">edit</a>
+                </li>
+                <li>
+                    <a href="{{ path("test_generate_pdf", {id: test.id}) }}">Wygeneruj pdf</a>
+                </li>
+            </ul>
         {% endfor %}
-        </tbody>
-    </table>
-
     <ul>
         <li>
             <a href="{{ path('test_new') }}">Create a new test</a>
         </li>
+
     </ul>
-    <a href="{{ path("test_generate_pdf", {id: 1}) }}">Ściągnij pdf</a>
 {% endblock %}

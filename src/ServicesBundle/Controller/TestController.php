@@ -2,10 +2,12 @@
 
 namespace ServicesBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use ServicesBundle\Entity\Test;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Test controller.
@@ -139,11 +141,23 @@ class TestController extends Controller
      * @Route("/generatepdf/{id}", name="test_generate_pdf")
      * @Method("GET")
      */
-    public function generatePdf($id)
+    public function generatePdfAction($id)
     {
         $testManager = $this->get('services.test_manager');
         $test = $this->getDoctrine()->getRepository('ServicesBundle:Test')->find($id);
-        $testManager->exportToPdf($test);
+        $tempFileName = $testManager->exportToPdf($test);
+
+        $content = file_get_contents($tempFileName);
+        $fileName = basename($tempFileName);
+
+        $response = new Response();
+
+        $response->headers->set('Content-Type', 'application/pdf');
+        $response->headers->set('Content-Disposition', 'attachment;filename="'.$fileName);
+
+        $response->setContent($content);
+
+        return $response;
 
     }
 }

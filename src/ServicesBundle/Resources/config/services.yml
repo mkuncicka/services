@@ -4,4 +4,4 @@ services:
 #        arguments: ["@service_id", "plain_value", "%parameter%"]
     services.test_manager:
         class: ServicesBundle\Manager\TestManager
-        arguments: ["knp_snappy.pdf", "doctrine.entity_manager", "@templating"]
+        arguments: ["@knp_snappy.pdf", "@doctrine", "@templating", "@kernel"]

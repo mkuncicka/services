@@ -2,8 +2,6 @@
 
 namespace ServicesBundle\Manager;
 
-use Symfony\Component\HttpFoundation\Response;
-
 class TestManager
 {
     private $pdfGenerator;
@@ -12,11 +10,14 @@ class TestManager
 
     private $templating;
 
-    public function __construct($pdfGenerator, $entityManager, $templating)
+    private $kernel;
+
+    public function __construct($pdfGenerator, $entityManager, $templating, $kernel)
     {
         $this->pdfGenerator = $pdfGenerator;
         $this->entityManager = $entityManager;
         $this->templating = $templating;
+        $this->kernel = $kernel;
     }
 
     public function exportToPdf($test)
@@ -30,26 +31,17 @@ class TestManager
      * Metoda obsługująca generowanie pdfów
      *
      */
-    private function generatePdf($template, $data, $fileName = null)
+    private function generatePdf($template, $test, $fileName = null)
     {
-        $tempFileName = '/tmp/'.($fileName ? $fileName : (md5($template.time().rand()).'.pdf'));
+        $tempFileName = realpath($this->kernel->getRootDir()) . '/../web/tmp/'.($fileName ? $fileName : (md5($template.time().rand()).'.pdf'));
 
         $filePath = $this->pdfGenerator->generateFromHtml(
             $this->templating->render(
-                $template, $data
+                $template,
+                array ('test' => $test)
             ), $tempFileName
         );
-        $fileName = basename($filePath);
 
-        $content = file_get_contents($filePath);
-
-        $response = new Response();
-
-        $response->headers->set('Content-Type', 'application/pdf');
-        $response->headers->set('Content-Disposition', 'attachment;filename="'.$fileName);
-
-        $response->setContent($content);
-
-        return $response;
+        return $tempFileName;
     }
 }

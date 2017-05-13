@@ -1,27 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Test nr {{ test.id }}</h1>
-    <h1>{{ test.title }}</h1>
-
-    <table>
-        <tbody>
+        <h2>{{ test.title }}</h2>
         {% for question in test.questions %}
-        <tr>
-            <td>{{ question }}</td>
-        </tr>
-        {% for answer in question.answers.id %}
-        <tr>
-            <td>{{ answer.id }}</td>
-        </tr>
-        </tbody>
-    </table>
-
-    <ul>
-        <li>
-            {{ form_start(delete_form) }}
-            <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+            <h3>{{ question.text }}</h3>
+            {% for answer in question.answers %}
+                <p>{{ answer.text }}</p>
+            {% endfor %}
+            <hr>
+        {% endfor %}
 {% endblock %}
