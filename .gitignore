@@ -1,5 +1,5 @@
 /web/bundles/
-/web/temp/*
+/web/tmp/*
 /app/bootstrap.php.cache
 /app/cache/*
 /app/config/parameters.yml
