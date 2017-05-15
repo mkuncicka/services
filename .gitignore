@@ -1,5 +1,4 @@
 /web/bundles/
-/web/temp/
 /web/temp/*
 /app/bootstrap.php.cache
 /app/cache/*
